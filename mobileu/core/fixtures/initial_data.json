@@ -1,7 +1,7 @@
 [
   {
     "pk": 1,
-    "model": "core.class",
+    "model": "mobileu.core.class",
     "fields": {
       "startdate": null,
       "enddate": null,
@@ -13,7 +13,7 @@
   },
   {
     "pk": 1,
-    "model": "core.participant",
+    "model": "mobileu.core.participant",
     "fields": {
       "points": 8,
       "learner": 2,
@@ -23,7 +23,7 @@
   },
   {
     "pk": 1,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -33,7 +33,7 @@
   },
   {
     "pk": 2,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -43,7 +43,7 @@
   },
   {
     "pk": 3,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -53,7 +53,7 @@
   },
   {
     "pk": 4,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -63,7 +63,7 @@
   },
   {
     "pk": 5,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -73,7 +73,7 @@
   },
   {
     "pk": 6,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -83,7 +83,7 @@
   },
   {
     "pk": 7,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -93,7 +93,7 @@
   },
   {
     "pk": 8,
-    "model": "core.participantpointbonusrel",
+    "model": "mobileu.core.participantpointbonusrel",
     "fields": {
       "pointbonus": 1,
       "participant": 1,
@@ -103,7 +103,7 @@
   },
   {
     "pk": 1,
-    "model": "core.participantbadgetemplaterel",
+    "model": "mobileu.core.participantbadgetemplaterel",
     "fields": {
       "awarddate": "2014-05-15T08:16:42.615Z",
       "participant": 1,
@@ -113,7 +113,7 @@
   },
   {
     "pk": 1,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-04",
       "question": 2,
@@ -124,7 +124,7 @@
   },
   {
     "pk": 2,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-04",
       "question": 1,
@@ -135,7 +135,7 @@
   },
   {
     "pk": 3,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-13",
       "question": 2,
@@ -146,7 +146,7 @@
   },
   {
     "pk": 4,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-13",
       "question": 1,
@@ -157,7 +157,7 @@
   },
   {
     "pk": 5,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-13",
       "question": 1,
@@ -168,7 +168,7 @@
   },
   {
     "pk": 6,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 1,
@@ -179,7 +179,7 @@
   },
   {
     "pk": 7,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 1,
@@ -190,7 +190,7 @@
   },
   {
     "pk": 8,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 2,
@@ -201,7 +201,7 @@
   },
   {
     "pk": 9,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 2,
@@ -212,7 +212,7 @@
   },
   {
     "pk": 10,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 2,
@@ -223,7 +223,7 @@
   },
   {
     "pk": 11,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 1,
@@ -234,7 +234,7 @@
   },
   {
     "pk": 12,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-15",
       "question": 2,
@@ -245,7 +245,7 @@
   },
   {
     "pk": 13,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 2,
@@ -256,7 +256,7 @@
   },
   {
     "pk": 14,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 2,
@@ -267,7 +267,7 @@
   },
   {
     "pk": 15,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 1,
@@ -278,7 +278,7 @@
   },
   {
     "pk": 16,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 2,
@@ -289,7 +289,7 @@
   },
   {
     "pk": 17,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 1,
@@ -300,7 +300,7 @@
   },
   {
     "pk": 18,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 2,
@@ -311,7 +311,7 @@
   },
   {
     "pk": 19,
-    "model": "core.participantquestionanswer",
+    "model": "mobileu.core.participantquestionanswer",
     "fields": {
       "answerdate": "2014-05-20",
       "question": 2,

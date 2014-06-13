@@ -1,7 +1,7 @@
 [
   {
     "pk": 1,
-    "model": "communication.post",
+    "model": "mobileu.communication.post",
     "fields": {
       "big_image": "img/macky.PNG",
       "name": "Maths Rockstars: Julia Macky",
@@ -15,7 +15,7 @@
   },
   {
     "pk": 2,
-    "model": "communication.post",
+    "model": "mobileu.communication.post",
     "fields": {
       "big_image": "",
       "name": "Tip: How to practice at home",
@@ -29,7 +29,7 @@
   },
   {
     "pk": 1,
-    "model": "communication.discussion",
+    "model": "mobileu.communication.discussion",
     "fields": {
       "name": "",
       "author": 2,
@@ -45,7 +45,7 @@
   },
   {
     "pk": 1,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 1,
       "name": "Welcome Message",
@@ -58,7 +58,7 @@
   },
   {
     "pk": 2,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 1,
       "name": "Second Message",
@@ -71,7 +71,7 @@
   },
   {
     "pk": 3,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -84,7 +84,7 @@
   },
   {
     "pk": 4,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -97,7 +97,7 @@
   },
   {
     "pk": 5,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -110,7 +110,7 @@
   },
   {
     "pk": 6,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -123,7 +123,7 @@
   },
   {
     "pk": 7,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -136,7 +136,7 @@
   },
   {
     "pk": 8,
-    "model": "communication.message",
+    "model": "mobileu.communication.message",
     "fields": {
       "direction": 2,
       "name": "Message from Theo Crous",
@@ -149,7 +149,7 @@
   },
   {
     "pk": 1,
-    "model": "communication.messagestatus",
+    "model": "mobileu.communication.messagestatus",
     "fields": {
       "view_status": false,
       "view_date": null,
@@ -161,7 +161,7 @@
   },
   {
     "pk": 2,
-    "model": "communication.messagestatus",
+    "model": "mobileu.communication.messagestatus",
     "fields": {
       "view_status": true,
       "view_date": "2014-05-16T08:59:38.430Z",
@@ -173,7 +173,7 @@
   },
   {
     "pk": 1,
-    "model": "communication.chatgroup",
+    "model": "mobileu.communication.chatgroup",
     "fields": {
       "course": 1,
       "name": "Investec ProMaths",
@@ -182,7 +182,7 @@
   },
   {
     "pk": 2,
-    "model": "communication.chatgroup",
+    "model": "mobileu.communication.chatgroup",
     "fields": {
       "course": 1,
       "name": "Bursary Help",
@@ -191,7 +191,7 @@
   },
   {
     "pk": 1,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "Hello World!",
       "chatgroup": 1,
@@ -201,7 +201,7 @@
   },
   {
     "pk": 2,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "This is a test!",
       "chatgroup": 1,
@@ -211,7 +211,7 @@
   },
   {
     "pk": 3,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "Not a cool test , but okay this could work if there is a lot of text to show on the screen. Maybe if there is too much text we can do something about it?",
       "chatgroup": 1,
@@ -221,7 +221,7 @@
   },
   {
     "pk": 4,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "Not a cool test , but okay this could work if there is a lot of text to show on the screen. Maybe if there is too much text we can do something about it?",
       "chatgroup": 1,
@@ -231,7 +231,7 @@
   },
   {
     "pk": 5,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -241,7 +241,7 @@
   },
   {
     "pk": 6,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -251,7 +251,7 @@
   },
   {
     "pk": 7,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -261,7 +261,7 @@
   },
   {
     "pk": 8,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -271,7 +271,7 @@
   },
   {
     "pk": 9,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -281,7 +281,7 @@
   },
   {
     "pk": 10,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -291,7 +291,7 @@
   },
   {
     "pk": 11,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "",
       "chatgroup": 1,
@@ -301,7 +301,7 @@
   },
   {
     "pk": 12,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "cool test bro",
       "chatgroup": 1,
@@ -311,7 +311,7 @@
   },
   {
     "pk": 13,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "cool test bro",
       "chatgroup": 1,
@@ -321,7 +321,7 @@
   },
   {
     "pk": 14,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "cool test bro",
       "chatgroup": 1,
@@ -331,7 +331,7 @@
   },
   {
     "pk": 15,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "cool test bro",
       "chatgroup": 1,
@@ -341,7 +341,7 @@
   },
   {
     "pk": 16,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "cool test bro",
       "chatgroup": 1,
@@ -351,7 +351,7 @@
   },
   {
     "pk": 17,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "pppo,omiiihuhuuhuhuuuhuunuunu",
       "chatgroup": 1,
@@ -361,7 +361,7 @@
   },
   {
     "pk": 18,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "pppo,omiiihuhuuhuhuuuhuunuunu",
       "chatgroup": 1,
@@ -371,7 +371,7 @@
   },
   {
     "pk": 19,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "test message",
       "chatgroup": 1,
@@ -381,7 +381,7 @@
   },
   {
     "pk": 20,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "ssssssssssssssssssssssssssssssssssssssssssss sssssssss sssssss",
       "chatgroup": 1,
@@ -391,7 +391,7 @@
   },
   {
     "pk": 21,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "ssssssssssssssssssssssssssssssssssssssssssss sssssssss sssssss",
       "chatgroup": 1,
@@ -401,7 +401,7 @@
   },
   {
     "pk": 22,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "no way",
       "chatgroup": 1,
@@ -411,7 +411,7 @@
   },
   {
     "pk": 23,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "no way",
       "chatgroup": 1,
@@ -421,7 +421,7 @@
   },
   {
     "pk": 24,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "no way",
       "chatgroup": 1,
@@ -431,7 +431,7 @@
   },
   {
     "pk": 25,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "no way",
       "chatgroup": 1,
@@ -441,7 +441,7 @@
   },
   {
     "pk": 26,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "crash",
       "chatgroup": 1,
@@ -451,7 +451,7 @@
   },
   {
     "pk": 27,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "nice",
       "chatgroup": 1,
@@ -461,7 +461,7 @@
   },
   {
     "pk": 28,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "sss",
       "chatgroup": 1,
@@ -471,7 +471,7 @@
   },
   {
     "pk": 29,
-    "model": "communication.chatmessage",
+    "model": "mobileu.communication.chatmessage",
     "fields": {
       "content": "kakaaa",
       "chatgroup": 1,
