@@ -1,7 +1,7 @@
 [
   {
     "pk": 1,
-    "model": "mobileu.organisationorganisation",
+    "model": "mobileu.organisation.organisation",
     "fields": {
       "website": "http://www.oneplus.co.za/",
       "email": "info@oneplus.co.za",
@@ -11,7 +11,7 @@
   },
   {
     "pk": 1,
-    "model": "mobileu.organisationschool",
+    "model": "mobileu.organisation.school",
     "fields": {
       "website": "",
       "email": "",
@@ -22,7 +22,7 @@
   },
   {
     "pk": 1,
-    "model": "mobileu.organisationcourse",
+    "model": "mobileu.organisation.course",
     "fields": {
       "slug": "one_plus_g11",
       "name": "One Plus Grade 11",
@@ -31,7 +31,7 @@
   },
   {
     "pk": 1,
-    "model": "mobileu.organisationmodule",
+    "model": "mobileu.organisation.module",
     "fields": {
       "course": 1,
       "name": "Sequences and Series",
@@ -40,7 +40,7 @@
   },
   {
     "pk": 2,
-    "model": "mobileu.organisationmodule",
+    "model": "mobileu.organisation.module",
     "fields": {
       "course": 1,
       "name": "Polynomials",
@@ -49,7 +49,7 @@
   },
   {
     "pk": 3,
-    "model": "mobileu.organisationmodule",
+    "model": "mobileu.organisation.module",
     "fields": {
       "course": 1,
       "name": "Factorisation",
