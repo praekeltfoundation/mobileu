@@ -52,4 +52,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['gamification']
+    complete_apps = ['mobileu']

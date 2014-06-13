@@ -96,4 +96,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['organisation']
+    complete_apps = ['mobileu']

@@ -195,5 +195,5 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['core']
+    complete_apps = ['mobileu']
     symmetrical = True
