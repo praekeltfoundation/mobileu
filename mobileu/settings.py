@@ -41,12 +41,12 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    "core",
-    "gamification",
-    "communication",
-    "content",
-    "auth",
-    "organisation",
+    "mobileu.core",
+    "mobileu.gamification",
+    "mobileu.communication",
+    "mobileu.content",
+    "mobileu.auth",
+    "mobileu.organisation",
     "django_summernote",
     "south"
 
