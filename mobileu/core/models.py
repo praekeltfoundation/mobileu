@@ -1,11 +1,13 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.models import Sum
-from datetime import datetime
-from organisation.models import Course
-from auth.models import Learner
-from gamification.models import (
+
+from mobileu.organisation.models import Course
+from mobileu.auth.models import Learner
+from mobileu.gamification.models import (
     GamificationPointBonus, GamificationBadgeTemplate, GamificationScenario)
-from content.models import TestingQuestion, TestingQuestionOption
+from mobileu.content.models import TestingQuestion, TestingQuestionOption
 
 
 class Class(models.Model):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from models import *
+
+from mobileu.content.models import *
 
 
 class TestingQuestionInline(admin.TabularInline):

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from models import (
+
+from mobileu.auth.models import (
     SystemAdministrator, SchoolManager, CourseManager, CourseMentor, Learner)
 
 

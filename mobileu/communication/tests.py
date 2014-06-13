@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from communication.models import Message
-from organisation.models import Course
+from mobileu.communication.models import Message
+from mobileu.organisation.models import Course
 
 
 class TestMessage(TestCase):

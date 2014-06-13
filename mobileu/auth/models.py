@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from organisation.models import School, Course
+
+from mobileu.organisation.models import School, Course
+
 
 
 # Base class for custom MobileU user model

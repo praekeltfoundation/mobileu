@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.db import models
 from django.conf import settings
-from datetime import datetime
-from organisation.models import Course, Module
-from content.models import TestingQuestion
+
+from mobileu.organisation.models import Course, Module
+from mobileu.content.models import TestingQuestion
 
 
 class Page(models.Model):

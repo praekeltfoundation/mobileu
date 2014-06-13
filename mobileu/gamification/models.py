@@ -1,5 +1,6 @@
 from django.db import models
-from organisation.models import Course, Module
+
+from mobileu.organisation.models import Course, Module
 
 
 class GamificationPointBonus(models.Model):

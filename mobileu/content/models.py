@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
-from organisation.models import Module
+
+from mobileu.organisation.models import Module
 
 
 class LearningChapter(models.Model):

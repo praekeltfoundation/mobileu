@@ -1,5 +1,6 @@
 from django.contrib import admin
-from core.models import *
+
+from mobileu.core.models import *
 
 
 class ParticipantInline(admin.TabularInline):
