@@ -1,0 +1,59 @@
+[
+  {
+    "pk": 1,
+    "model": "mobileu.organisationorganisation",
+    "fields": {
+      "website": "http://www.oneplus.co.za/",
+      "email": "info@oneplus.co.za",
+      "name": "One Plus",
+      "description": "OnePlus is a gamified mobile maths challenge porta"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "mobileu.organisationschool",
+    "fields": {
+      "website": "",
+      "email": "",
+      "organisation": 1,
+      "name": "Germiston High School",
+      "description": ""
+    }
+  },
+  {
+    "pk": 1,
+    "model": "mobileu.organisationcourse",
+    "fields": {
+      "slug": "one_plus_g11",
+      "name": "One Plus Grade 11",
+      "description": ""
+    }
+  },
+  {
+    "pk": 1,
+    "model": "mobileu.organisationmodule",
+    "fields": {
+      "course": 1,
+      "name": "Sequences and Series",
+      "description": ""
+    }
+  },
+  {
+    "pk": 2,
+    "model": "mobileu.organisationmodule",
+    "fields": {
+      "course": 1,
+      "name": "Polynomials",
+      "description": ""
+    }
+  },
+  {
+    "pk": 3,
+    "model": "mobileu.organisationmodule",
+    "fields": {
+      "course": 1,
+      "name": "Factorisation",
+      "description": ""
+    }
+  }
+]
