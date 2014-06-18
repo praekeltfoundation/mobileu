@@ -15,8 +15,8 @@ class Page(models.Model):
     These pages are manageable in the administration interface.
     """
     name = models.CharField(
-        "Name", max_length=500, null=True, blank=False, unique=True)
-    description = models.CharField("Description", max_length=50, blank=True)
+        "Name", max_length=5000, null=True, blank=False, unique=True)
+    description = models.CharField("Description", max_length=500, blank=True)
     course = models.ForeignKey(Course, null=True, blank=False)
 
     def __str__(self):
@@ -36,8 +36,8 @@ class Post(models.Model):
     to read more.
     """
     name = models.CharField(
-        "Name", max_length=50, null=True, blank=False, unique=True)
-    description = models.CharField("Description", max_length=50, blank=True)
+        "Name", max_length=500, null=True, blank=False, unique=True)
+    description = models.CharField("Description", max_length=500, blank=True)
     course = models.ForeignKey(Course, null=True, blank=False)
     big_image = models.ImageField(
         "Big Image", upload_to="img/", blank=True, null=True)
@@ -67,8 +67,8 @@ class Discussion(models.Model):
     displayed next to their name as well as any special tags that show
     moderators etc. The MVP does not have any report abuse functionality.
     """
-    name = models.CharField("Name", max_length=50, null=True, blank=True)
-    description = models.CharField("Description", max_length=50, blank=True)
+    name = models.CharField("Name", max_length=500, null=True, blank=True)
+    description = models.CharField("Description", max_length=500, blank=True)
     content = models.TextField("Content", blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     publishdate = models.DateTimeField("Publish Date", null=True, blank=True)
@@ -89,8 +89,8 @@ class Discussion(models.Model):
 
 class Message(models.Model):
     name = models.CharField(
-        "Name", max_length=50, null=True, blank=False, unique=False)
-    description = models.CharField("Description", max_length=50, blank=True)
+        "Name", max_length=5000, null=True, blank=False, unique=False)
+    description = models.CharField("Description", max_length=5000, blank=True)
     course = models.ForeignKey(Course, null=True, blank=False)
     content = models.TextField("Content", blank=True)
     publishdate = models.DateTimeField("Publish Date", null=True, blank=True)
@@ -169,8 +169,8 @@ class ChatGroup(models.Model):
     Chat groups are Learner only places where messages can be exchanged.
     """
     name = models.CharField(
-        "Name", max_length=50, null=True, blank=False, unique=True)
-    description = models.CharField("Description", max_length=50, blank=True)
+        "Name", max_length=500, null=True, blank=False, unique=True)
+    description = models.CharField("Description", max_length=500, blank=True)
     course = models.ForeignKey(Course, null=True, blank=False)
 
     def __str__(self):
