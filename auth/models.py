@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from organisation.models import School, Course
 
 
+
 # Base class for custom MobileU user model
 class CustomUser(AbstractUser):
     mobile = models.CharField(verbose_name="Mobile Phone Number",
