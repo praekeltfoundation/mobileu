@@ -117,6 +117,10 @@ class Learner(CustomUser):
         null=True,
         blank=True
     )
+    last_active_date = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "Learner"
