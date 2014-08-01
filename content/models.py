@@ -2,9 +2,11 @@ from django.db import models
 from django.core.validators import MaxValueValidator
 from organisation.models import Module
 from django.core.urlresolvers import reverse
+from django.utils.html import remove_tags
 
 
 class LearningChapter(models.Model):
+
     """
     Each modules has learning content which can be broken up into chapters.
     Essentially this content is HTML and needs to
@@ -28,6 +30,7 @@ class LearningChapter(models.Model):
 
 
 class TestingBank(models.Model):
+
     """
     Each modules has a series of questions. The MVP supports two question
     types, multiple-choice and free-form entry.
@@ -66,7 +69,11 @@ class TestingQuestion(models.Model):
         default=1)
     points = models.PositiveIntegerField(
         "Points", validators=[MaxValueValidator(500)], default=0)
-    textbook_link = models.CharField("Textbook Link", max_length=500,blank=True, null=True)
+    textbook_link = models.CharField(
+        "Textbook Link",
+        max_length=500,
+        blank=True,
+        null=True)
 
     def __str__(self):
         return self.name
@@ -77,23 +84,35 @@ class TestingQuestion(models.Model):
 
 
 class TestingQuestionOption(models.Model):
-    name = models.CharField("Name", max_length=500, null=True, blank=False, unique=True)
+    name = models.CharField(
+        "Name",
+        max_length=500,
+        null=True,
+        blank=False,
+        unique=True)
     question = models.ForeignKey(TestingQuestion, null=True, blank=False)
     order = models.PositiveIntegerField("Order", default=1)
     content = models.TextField("Content", blank=True)
     correct = models.BooleanField("Correct")
 
     def link(self):
-        return "<a href='%s' target='_blank'>Edit</a>" \
-               % reverse('admin:content_testingquestionoption_change', args=[self.id])
+        return "<a href='%s' target='_blank'>Edit</a>" % reverse(
+            'admin:content_testingquestionoption_change',
+            args=[
+                self.id])
     link.allow_tags = True
+
+    def admin_thumbnail(self):
+            thumbnail = remove_tags(self.content, "p br")
+            return u'%s' % thumbnail
+    admin_thumbnail.short_description = 'Content'
+    admin_thumbnail.allow_tags = True
 
     def __str__(self):
         return self.name
-    
+
     def __unicode__(self):
         return self.name
-
 
     class Meta:
         verbose_name = "Question Option"
