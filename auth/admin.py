@@ -3,11 +3,10 @@ from django.shortcuts import render_to_response
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from import_export.admin import ImportExportModelAdmin
-from communication.utils import VumiSmsApi
-from random import randint
-from auth.forms import SendWelcomeSmsForm
+from communication.utils import VumiSmsApi, get_autologin_link
+from auth.forms import SendSmsForm
+from communication.tasks import bulk_send_all
 from django import template
-from communication.utils import get_autologin_link
 from auth.models import Learner, SystemAdministrator, SchoolManager,\
     CourseManager, CourseMentor
 from .forms import SystemAdministratorChangeForm, \
@@ -15,8 +14,7 @@ from .forms import SystemAdministratorChangeForm, \
     SchoolManagerCreationForm, CourseManagerChangeForm, \
     CourseManagerCreationForm, CourseMentorChangeForm, \
     CourseMentorCreationForm, LearnerChangeForm, LearnerCreationForm
-import koremutake
-from django.contrib.auth.hashers import make_password
+
 from core.models import ParticipantQuestionAnswer
 from auth.resources import LearnerResource
 from auth.filters import CourseFilter, AirtimeFilter
@@ -149,13 +147,13 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ("username", "last_name", "first_name", "school",
+    list_display = ("username", "first_name", "last_name", "school",
                     "area", "completed_questions", "percentage_correct",
                     "welcome_message_sent")
-    list_filter = ("first_name", "last_name", "mobile", "country",
+    list_filter = ("first_name", "last_name", "mobile", 'school', "country",
                    "area", "welcome_message_sent", CourseFilter, AirtimeFilter)
     search_fields = ("last_name", "first_name", "username")
-    ordering = ("country", "area", "last_name")
+    ordering = ("country", "area", "last_name", "first_name", "last_login")
     filter_horizontal = ()
     readonly_fields = ("mobile",)
 
@@ -180,69 +178,36 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
 
     def send_sms(self, request, queryset):
         form = None
+        MAX_VUMI_SEND = 30
         if 'apply' in request.POST:
-            form = SendWelcomeSmsForm(request.POST)
+            form = SendSmsForm(request.POST)
 
             if form.is_valid():
                 vumi = VumiSmsApi()
                 message = form.cleaned_data["message"]
 
-                # Check if a password or autologin message
-                is_welcome_message = False
-                is_autologin_message = False
-                if "|password|" in message:
-                    is_welcome_message = True
-                if "|autologin|" in message:
-                    is_autologin_message = True
+                if queryset.count() <= MAX_VUMI_SEND:
+                    successful, fail = vumi.send_all(queryset, message)
+                    async = False
+                else:
+                    #Use celery task
+                    bulk_send_all.delay(queryset, message)
+                    successful = 0
+                    fail = []
+                    async = True
 
-                successful = 0
-                fail = []
-
-                for learner in queryset:
-                    password = None
-                    if is_welcome_message:
-                        # Generate password
-                        password = koremutake.encode(randint(10000, 100000))
-                        learner.password = make_password(password)
-                    if is_autologin_message:
-                        # Generate autologin link
-                        learner.generate_unique_token()
-                    learner.save()
-
-                    # Send sms
-                    try:
-                        sms, sent = vumi.send(
-                            learner.username,
-                            message=message,
-                            password=password,
-                            autologin=get_autologin_link(learner.unique_token)
-                        )
-                    except:
-                        sent = False
-                        pass
-
-                    if sent:
-                        successful += 1
-                    else:
-                        fail.append(learner.username)
-
-                    # Save welcome message details
-                    if is_welcome_message and sent:
-                        learner.welcome_message = sms
-                        learner.welcome_message_sent = True
-
-                    learner.save()
                 return render_to_response(
                     'admin/auth/sms_result.html',
                     {
                         'redirect': request.get_full_path(),
                         'success_num': successful,
-                        'fail': fail
+                        'fail': fail,
+                        'async': async
                     },
                 )
 
         if not form:
-            form = SendWelcomeSmsForm(
+            form = SendSmsForm(
                 initial={
                     '_selected_action': request.POST.getlist(
                         admin.ACTION_CHECKBOX_NAME,
@@ -266,6 +231,7 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
         ).count()
     completed_questions.short_description = "Completed Questions"
     completed_questions.allow_tags = True
+    completed_questions.admin_order_field = 'participant__learner'
 
     def percentage_correct(self, learner):
         complete = self.completed_questions(learner)
@@ -278,6 +244,7 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
             return 0
     percentage_correct.short_description = "Percentage correct"
     percentage_correct.allow_tags = True
+    percentage_correct.admin_order_field = 'participant__learner'
 
 # Auth
 admin.site.register(SystemAdministrator, SystemAdministratorAdmin)
