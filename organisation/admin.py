@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from content.admin import TestingQuestionInline
 
 
 class SchoolInline(admin.TabularInline):
@@ -12,8 +13,13 @@ class SchoolInline(admin.TabularInline):
 class ModuleInline(admin.TabularInline):
     model = Module
     extra = 1
-    fields = ("name", "description")
-    ordering = ("name", )
+    fields = ("name", "description", "order")
+    ordering = ("order", )
+
+
+class CourseModuleInline(admin.TabularInline):
+    model = CourseModuleRel
+    extra = 1
 
 
 class OrganisationAdmin(admin.ModelAdmin):
@@ -45,18 +51,18 @@ class CourseAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["name", "description", "slug"]})
     ]
-    inlines = (ModuleInline, )
+    inlines = (CourseModuleInline, )
     ordering = ("name", )
 
 
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("course", "name", "description", "is_active")
-    list_filter = ("course", )
+    list_display = ("name", "description", "order", "is_active")
     search_fields = ("name", "description")
     fieldsets = [
-        (None, {"fields": ["name", "description", "is_active", "course"]})
+        (None, {"fields": ["name", "description", "order", "is_active"]})
     ]
-    ordering = ("course", "name", )
+    ordering = ("name", "order")
+    inlines = (TestingQuestionInline, )
 
 
 # Organisation
