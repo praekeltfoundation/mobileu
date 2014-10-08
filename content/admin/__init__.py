@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.core.urlresolvers import reverse
-from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
 from ..models import TestingQuestion, TestingQuestionOption, LearningChapter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -8,7 +7,7 @@ from import_export import fields
 from core.models import ParticipantQuestionAnswer
 
 
-class TestingQuestionOptionInline(admin.StackedInline):
+class TestingQuestionOptionInline(SummernoteInlineModelAdmin, admin.StackedInline):
     model = TestingQuestionOption
     extra = 0
     # TODO: fix admin_thumbnail - call it content preview?
@@ -16,7 +15,7 @@ class TestingQuestionOptionInline(admin.StackedInline):
     ordering = ("name", )
 
 
-class LearningChapterInline(admin.StackedInline):
+class LearningChapterInline(SummernoteInlineModelAdmin, admin.StackedInline):
     model = LearningChapter
     extra = 0
     fields = ("module", "order", "name", "description", "content")
