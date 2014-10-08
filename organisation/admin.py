@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from .models import *
-from content.admin import TestingQuestionInline
+from content.admin import LearningChapterInline
 
 
 class SchoolInline(admin.TabularInline):
@@ -56,13 +57,25 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ("name", "description", "order", "is_active")
+    list_display = ("name", "description", "order", "is_active", "question_change_url")
     search_fields = ("name", "description")
     fieldsets = [
         (None, {"fields": ["name", "description", "order", "is_active"]})
     ]
     ordering = ("name", "order")
-    inlines = (TestingQuestionInline, )
+    # NOTE: TestingQuestionInline has been removed for 2 reasons:
+    # 1. There might be too many questions.
+    # 2. It would separate question editing from question option editing.
+    inlines = (LearningChapterInline, )
+
+    def question_change_url(self, obj):
+        return '<a href="%s?module__id__exact=%s">Edit questions</a>' % (
+            reverse('admin:content_testingquestion_changelist'),
+            obj.pk
+        )
+    question_change_url.allow_tags = True
+    question_change_url.short_description = ''
+
 
 
 # Organisation

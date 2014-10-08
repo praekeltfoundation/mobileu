@@ -92,15 +92,6 @@ class TestingQuestionOption(models.Model):
             self.content = format_option(self.content)
         super(TestingQuestionOption, self).save(*args, **kwargs)
 
-    # TODO: we don't want a separate editing interface
-    # remove this.
-    '''def link(self):
-        return "<a href='%s' target='_blank'>Edit</a>" % reverse(
-            'admin:content_testingquestionoption_change',
-            args=[
-                self.id])
-    link.allow_tags = True'''
-
     def admin_thumbnail(self):
         thumbnail = remove_tags(self.content, "p br")
         return u'%s' % thumbnail
