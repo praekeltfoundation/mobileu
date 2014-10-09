@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
 from organisation.models import Module
-from django.core.urlresolvers import reverse
 from django.utils.html import remove_tags
 from mobileu.utils import format_content, format_option
 

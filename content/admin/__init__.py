@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
@@ -9,6 +9,7 @@ from import_export import fields
 from ..models import TestingQuestion, TestingQuestionOption, LearningChapter
 from core.models import ParticipantQuestionAnswer
 from .api import api_v1
+from .views import QuestionEditingAppView
 
 
 class TestingQuestionOptionInline(SummernoteInlineModelAdmin, admin.StackedInline):
@@ -118,7 +119,10 @@ class TestingQuestionAdmin(SummernoteModelAdmin, ImportExportModelAdmin):
 
     def get_urls(self):
         return patterns('',
-            (r'^api/', include(api_v1.urls))
+            (r'^api/', include(api_v1.urls)),
+            url(r'^app/$', QuestionEditingAppView.as_view(),
+                name="question-editing-app")
+
         ) + super(TestingQuestionAdmin, self).get_urls()
 
     fieldsets = [
@@ -128,7 +132,7 @@ class TestingQuestionAdmin(SummernoteModelAdmin, ImportExportModelAdmin):
             {"fields": ["question_content", "answer_content"]}),
         ("Additional fields",
             {"fields": ["textbook_link", "difficulty", "points"],
-             "classes": ("collapse",)})
+             "classes": ("grp-collapse", "grp-closed")})
     ]
     inlines = (TestingQuestionOptionInline,)
     resource_class = TestingQuestionResource
