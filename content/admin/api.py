@@ -1,7 +1,7 @@
 '''
 A limited RESTful API for editing TestingQuestion and
 TestingQuestionOption objects. Only staff members are
-authorized to used the API.
+authorized to use the API.
 '''
 from tastypie import fields
 from tastypie.api import NamespacedApi
@@ -16,6 +16,7 @@ from ..models import TestingQuestion, TestingQuestionOption
 
 class BaseResource(NamespacedModelResource):
     class Meta:
+        always_return_data = True
         authentication = SessionAuthentication()
         authorization = DjangoAuthorization()
 
