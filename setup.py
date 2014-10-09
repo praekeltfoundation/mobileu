@@ -12,6 +12,7 @@ setup(
         'django-summernote==0.5.15',
         'django-import-export==0.2.2',
         'django-celery',
+        'django-tastypie==0.12.0',
         'Pillow==2.4.0',
         'psycopg2==2.5.3',
         'koremutake==1.0.5',
