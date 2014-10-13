@@ -77,7 +77,6 @@ class ModuleAdmin(admin.ModelAdmin):
     question_change_url.short_description = ''
 
 
-
 # Organisation
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.register(School, SchoolAdmin)
