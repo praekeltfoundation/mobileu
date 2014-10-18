@@ -4,9 +4,6 @@ setup(
     name='django-mobileu',
     version='1.1.3',
     packages=find_packages(),
-    dependency_links=[
-        'http://github.com/PaulUithol/backbone-tastypie/tarball/0.2#egg=Backbone-tastypie-0.2'
-    ],
     install_requires=[
         'Django==1.6.5',
         'South==0.8.4',
@@ -15,8 +12,6 @@ setup(
         'django-summernote==0.5.15',
         'django-import-export==0.2.2',
         'django-celery',
-        'django-tastypie==0.12.0',
-        'Backbone-tastypie==0.2',
         'Pillow==2.4.0',
         'psycopg2==2.5.3',
         'koremutake==1.0.5',

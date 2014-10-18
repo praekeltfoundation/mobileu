@@ -1,15 +1,10 @@
-from django.conf.urls import patterns, include, url
 from django.contrib import admin
-
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
+from ..models import TestingQuestion, TestingQuestionOption, LearningChapter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export import fields
-
-from ..models import TestingQuestion, TestingQuestionOption, LearningChapter
 from core.models import ParticipantQuestionAnswer
-from .api import api_v1
-from .views import QuestionEditingAppView
 
 
 class TestingQuestionOptionInline(SummernoteInlineModelAdmin, admin.StackedInline):
@@ -116,14 +111,6 @@ class TestingQuestionAdmin(SummernoteModelAdmin, ImportExportModelAdmin):
             return 0
     percentage_correct.allow_tags = True
     percentage_correct.short_description = "Percentage Correct"
-
-    def get_urls(self):
-        return patterns('',
-            (r'^api/', include(api_v1.urls)),
-            url(r'^app/$', QuestionEditingAppView.as_view(),
-                name="question-editing-app")
-
-        ) + super(TestingQuestionAdmin, self).get_urls()
 
     fieldsets = [
         (None,
