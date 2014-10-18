@@ -31,6 +31,7 @@ class LearningChapter(models.Model):
     class Meta:
         verbose_name = "Learning Chapter"
         verbose_name_plural = "Learning Chapters"
+        ordering = ('module__name', 'order')
 
 
 class TestingQuestion(models.Model):
@@ -73,6 +74,7 @@ class TestingQuestion(models.Model):
     class Meta:
         verbose_name = "Question"
         verbose_name_plural = "Questions"
+        ordering = ('module__name', 'order')
 
 
 class TestingQuestionOption(models.Model):
@@ -106,6 +108,7 @@ class TestingQuestionOption(models.Model):
     class Meta:
         verbose_name = "Answer Option"
         verbose_name_plural = "Answer Options"
+        ordering = ('name', )
 
 allowed_tags = ['b', 'i', 'strong', 'em', 'img', 'a', 'br']
 allowed_attributes = ['href', 'title', 'style', 'src']
