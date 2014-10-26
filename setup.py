@@ -9,7 +9,7 @@ setup(
         'South==0.8.4',
         'Celery',
         'django-grappelli==2.5.3',
-        'django-summernote==0.5.13',
+        'django-summernote==0.5.15',
         'django-import-export==0.2.2',
         'django-celery',
         'Pillow==2.4.0',

@@ -98,6 +98,7 @@ class Module(models.Model):
     class Meta:
         verbose_name = "Module"
         verbose_name_plural = "Modules"
+        ordering = ('name', )
 
 
 class CourseModuleRel(models.Model):

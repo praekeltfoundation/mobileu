@@ -32,6 +32,7 @@ class LearningChapter(models.Model):
     class Meta:
         verbose_name = "Learning Chapter"
         verbose_name_plural = "Learning Chapters"
+        ordering = ('module__name', 'order')
 
 
 class TestingQuestion(models.Model):
@@ -72,8 +73,9 @@ class TestingQuestion(models.Model):
         super(TestingQuestion, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = "Test Question"
-        verbose_name_plural = "Test Questions"
+        verbose_name = "Question"
+        verbose_name_plural = "Questions"
+        ordering = ('module__name', 'order')
 
 
 class TestingQuestionOption(models.Model):
@@ -84,7 +86,6 @@ class TestingQuestionOption(models.Model):
         blank=False,
         unique=True)
     question = models.ForeignKey(TestingQuestion, null=True, blank=False)
-    order = models.PositiveIntegerField("Order", default=1)
     content = models.TextField("Content", blank=True)
     correct = models.BooleanField("Correct")
 
@@ -92,13 +93,6 @@ class TestingQuestionOption(models.Model):
         if self.content:
             self.content = format_option(self.content)
         super(TestingQuestionOption, self).save(*args, **kwargs)
-
-    def link(self):
-        return "<a href='%s' target='_blank'>Edit</a>" % reverse(
-            'admin:content_testingquestionoption_change',
-            args=[
-                self.id])
-    link.allow_tags = True
 
     def admin_thumbnail(self):
         thumbnail = remove_tags(self.content, "p br")
@@ -113,8 +107,9 @@ class TestingQuestionOption(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Question Option"
-        verbose_name_plural = "Question Options"
+        verbose_name = "Answer Option"
+        verbose_name_plural = "Answer Options"
+        ordering = ('name', )
 
 allowed_tags = ['b', 'i', 'strong', 'em', 'img', 'a', 'br']
 allowed_attributes = ['href', 'title', 'style', 'src']

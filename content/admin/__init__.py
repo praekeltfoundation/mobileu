@@ -1,41 +1,29 @@
 from django.contrib import admin
-from django_summernote.admin import SummernoteModelAdmin
-from .models import TestingQuestion, TestingQuestionOption, LearningChapter
+from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
+from ..models import TestingQuestion, TestingQuestionOption, LearningChapter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export import fields
 from core.models import ParticipantQuestionAnswer
 
 
-class TestingQuestionInline(admin.TabularInline):
-    model = TestingQuestion
-    extra = 1
-    fields = ("order", "name", "description", "difficulty", "points")
-    ordering = ("order", "name")
-
-
-class TestingQuestionOptionInline(admin.TabularInline):
+class TestingQuestionOptionInline(SummernoteInlineModelAdmin, admin.StackedInline):
     model = TestingQuestionOption
-    extra = 1
-    fields = ("order", "name", "admin_thumbnail", "correct", "link")
-    readonly_fields = ('link', "admin_thumbnail")
-    ordering = ("order", "name")
+    extra = 0
+    # TODO: fix admin_thumbnail - call it content preview?
+    fields = ("name", "correct", "content")
+    ordering = ("name", )
 
 
-class LearningChapterAdmin(SummernoteModelAdmin):
-    list_display = ("module", "order", "name", "description")
-    list_filter = ("module", )
-    search_fields = ("name", "description")
-    fieldsets = [
-        (None,
-            {"fields": ["name", "description", "module", "order"]}),
-        ("Content",
-            {"fields": ["content"]})
-    ]
+class LearningChapterInline(SummernoteInlineModelAdmin, admin.StackedInline):
+    model = LearningChapter
+    extra = 0
+    fields = ("module", "order", "name", "description", "content")
     ordering = ("module", "order", "name", )
 
 
 class TestingQuestionResource(resources.ModelResource):
+    # TODO: this import/export is not functional. Discard or fix.
 
     class Meta:
         model = TestingQuestion
@@ -128,25 +116,14 @@ class TestingQuestionAdmin(SummernoteModelAdmin, ImportExportModelAdmin):
         (None,
             {"fields": ["name", "description", "module", "order"]}),
         ("Content",
-            {"fields": ["question_content", "answer_content", "textbook_link",
-                        "difficulty", "points"]})
+            {"fields": ["question_content", "answer_content"]}),
+        ("Additional fields",
+            {"fields": ["textbook_link", "difficulty", "points"],
+             "classes": ("grp-collapse", "grp-closed")})
     ]
     inlines = (TestingQuestionOptionInline,)
     resource_class = TestingQuestionResource
 
 
-class TestingQuestionOptionAdmin(SummernoteModelAdmin):
-    list_display = ("question", "order", "name")
-    list_filter = ("question", )
-    search_fields = ("name",)
-    fieldsets = [
-        (None, {"fields": ["name", "question", "order"]}),
-        ("Content", {"fields": ["content", "correct"]})
-    ]
-    ordering = ("question", "order", "name", )
-
-
 # Content
-admin.site.register(LearningChapter, LearningChapterAdmin)
 admin.site.register(TestingQuestion, TestingQuestionAdmin)
-admin.site.register(TestingQuestionOption, TestingQuestionOptionAdmin)
