@@ -4,11 +4,13 @@ import os
 import shutil
 
 from django import forms
-from content.models import TestingQuestion, TestingQuestionOption, Module, Mathml, GoldenEgg
+from content.models import TestingQuestion, TestingQuestionOption, Module, Mathml, GoldenEgg, Event, SUMitEndPage, SUMit
+from gamification.models import GamificationScenario
 import requests
 from django.conf import settings
 from core.models import Class
 from organisation.models import Course
+from datetime import datetime
 
 
 class TestingQuestionCreateForm(forms.ModelForm):
@@ -277,3 +279,196 @@ class GoldenEggCreateForm(forms.ModelForm):
 
     class Meta:
         model = GoldenEgg
+
+
+class EventForm(forms.ModelForm):
+
+    def clean(self):
+        data = self.cleaned_data
+        if data.get('event_points') is None and data.get('airtime') is None and data.get('event_badge') is None:
+            msg = u"One award must be awarded."
+            self._errors["event_points"] = self.error_class([msg])
+            self._errors["airtime"] = self.error_class([msg])
+            self._errors["event_badge"] = self.error_class([msg])
+
+        elif data.get('event_points') and (data.get('airtime') or data.get('event_badge')):
+            msg = u"Only award can be awarded."
+            self._errors["event_points"] = self.error_class([msg])
+            self._errors["airtime"] = self.error_class([msg])
+            self._errors["event_badge"] = self.error_class([msg])
+
+        if data.get('activation_date'):
+            if data.get('activation_date') < datetime.now():
+                msg = u"Invalid date selected."
+                self._errors["activation_date"] = self.error_class([msg])
+        else:
+            msg = u"Select a valid date."
+            self._errors["activation_date"] = self.error_class([msg])
+
+        if not data.get('deactivation_date'):
+            msg = u"Invalid date selected."
+            self._errors["deactivation_date"] = self.error_class([msg])
+        else:
+            if data.get('deactivation_date') < datetime.now() or \
+                    data.get('deactivation_date') < data.get('activation_date'):
+                msg = u"Select a valid date."
+                self._errors["deactivation_date"] = self.error_class([msg])
+
+        return data
+
+    class Meta:
+        model = Event
+
+
+class EventSplashPageInlineFormSet(forms.models.BaseInlineFormSet):
+
+    def clean(self):
+        super(EventSplashPageInlineFormSet, self).clean()
+        splash_pages = []
+        if not hasattr(self.form, 'cleaned_data'):
+            for form in self.forms:
+                data = form.cleaned_data
+                if not data.get('DELETE') and data.get('order_number') is not None and data.get('header') is not None \
+                        and data.get('paragraph') is not None:
+                    if any(d['order_number'] == data.get('order_number') for d in splash_pages):
+                        raise forms.ValidationError({'name': ['Order number cannot be repeated.', ]})
+                    else:
+                        splash_pages.append(data)
+
+            if len(splash_pages) < 1:
+                raise forms.ValidationError({'name': ['You  must create at least one splash page.', ]})
+
+            splash_pages = sorted(splash_pages, key=lambda k: k['order_number'])
+
+            count = 0
+            for page in splash_pages:
+                count += 1
+                if page.get('order_number') != count:
+                    raise forms.ValidationError({'name': ["Order number's must be between 1 and %s." %
+                                                          len(splash_pages), ]})
+
+
+class EventStartPageInlineFormSet(forms.models.BaseInlineFormSet):
+
+    def clean(self):
+        super(EventStartPageInlineFormSet, self).clean()
+        if not hasattr(self.form, 'cleaned_data'):
+            count = 0
+            for form in self.forms:
+                data = form.cleaned_data
+                if data.get('header') is not None and data.get('paragraph') is not None and not data.get('DELETE'):
+                    count += 1
+
+            if count == 0:
+                raise forms.ValidationError({'name': ['You must create one start page']})
+
+
+class EventEndPageInlineFormSet(forms.models.BaseInlineFormSet):
+
+    def clean(self):
+        super(EventEndPageInlineFormSet, self).clean()
+        if not hasattr(self.form, 'cleaned_data'):
+            count = 0
+            for form in self.forms:
+                data = form.cleaned_data
+                if data.get('header') is not None and data.get('paragraph') is not None and not data.get('DELETE'):
+                    count += 1
+
+            if count == 0:
+                raise forms.ValidationError({'name': ['You must create one end page']})
+
+    class Meta:
+        model = Event
+
+
+class EventQuestionRelInline(forms.models.BaseInlineFormSet):
+
+    def clean(self):
+        super(EventQuestionRelInline, self).clean()
+        if not hasattr(self.form, 'cleaned_data'):
+            questions = []
+            for form in self.forms:
+                data = form.cleaned_data
+                if data.get('order') is not None and data.get('question') is not None and not data.get('DELETE'):
+                    if any(d['order'] == data.get('order') for d in questions):
+                        raise forms.ValidationError({'name': ['Order number cannot be repeated.', ]})
+                    if any(d['question'] == data.get('question') for d in questions):
+                        raise forms.ValidationError({'name': ['Questions cannot be repeated.', ]})
+                    questions.append(data)
+
+            if len(questions) < 1:
+                raise forms.ValidationError({'name': ['You must add at least one question to the event.']})
+
+            questions = sorted(questions, key=lambda k: k['order'])
+
+            count = 0
+            for page in questions:
+                count += 1
+                if page.get('order') != count:
+                    raise forms.ValidationError({'name': ["Order number's must start with 1 and increment by 1 for "
+                                                          "each questions added.", ]})
+
+
+class SUMitForm(forms.ModelForm):
+    badge = forms.ModelChoiceField(queryset=GamificationScenario.objects.filter(name="SUMit!"))
+
+    def clean(self):
+        data = self.cleaned_data
+
+        if data.get('activation_date'):
+            if data.get('activation_date') < datetime.now():
+                msg = u"Invalid date selected."
+                self._errors["activation_date"] = self.error_class([msg])
+        else:
+            msg = u"Select a valid date."
+            self._errors["activation_date"] = self.error_class([msg])
+
+        if not data.get('deactivation_date'):
+            msg = u"Invalid date selected."
+            self._errors["deactivation_date"] = self.error_class([msg])
+        else:
+            if data.get('deactivation_date') < datetime.now() or \
+                    data.get('deactivation_date') < data.get('activation_date'):
+                msg = u"Select a valid date."
+                self._errors["deactivation_date"] = self.error_class([msg])
+
+        return data
+
+    class Meta:
+        model = SUMit
+
+
+class SUMitEndPageInlineFormSet(forms.models.BaseInlineFormSet):
+    def clean(self):
+        super(SUMitEndPageInlineFormSet, self).clean()
+        if not hasattr(self.form, 'cleaned_data'):
+            count = 0
+            count_level1_4 = 0
+            count_level5 = 0
+            count_winner= 0
+            for form in self.forms:
+                data = form.cleaned_data
+                if data.get('header') is not None and data.get('paragraph') is not None and not data.get('DELETE'):
+                    count += 1
+                if data.get('type') == 1:
+                    count_level1_4 += 1
+                if data.get('type') == 2:
+                    count_level5 += 1
+                if data.get('type') == 3:
+                    count_winner += 1
+
+            if count == 0:
+                raise forms.ValidationError({'name': ['You must create one end page']})
+
+            if count_level1_4 != 1 and count_level5 != 1 and count_winner != 1:
+                raise forms.ValidationError({'name': ['You must create one of each']})
+
+    class Meta:
+        model = SUMitEndPage
+
+class SUMitLevelForm(forms.ModelForm):
+    def clean_order(self):
+        order = self.data.get("order")
+        if 1 < order < 5:
+            raise forms.ValidationError("Order must be between 1 and 5")
+        return order
