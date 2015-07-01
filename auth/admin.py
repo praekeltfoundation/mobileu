@@ -276,6 +276,7 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
     )
 
     actions = [send_sms, send_message]
+    list_per_page = 50
 
 
 class TeacherClassInline(admin.TabularInline):
