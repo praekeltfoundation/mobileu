@@ -16,7 +16,7 @@ from .forms import SystemAdministratorChangeForm, \
     TeacherCreationForm, TeacherChangeForm
 from core.models import ParticipantQuestionAnswer
 from auth.resources import LearnerResource, TeacherResource
-from auth.filters import AirtimeFilter, ClassFilter, CourseFilter
+from auth.filters import AirtimeFilter, ClassFilter, CourseFilter, LearnerLimit
 from core.models import TeacherClass
 from communication.models import Message
 from datetime import datetime
@@ -249,7 +249,7 @@ class LearnerAdmin(UserAdmin, ImportExportModelAdmin):
     list_display = ("username", "first_name", "last_name", "school",
                     "area", "welcome_message_sent")
     list_filter = ("first_name", "last_name", "mobile", 'school', "country", "area",
-                   "welcome_message_sent", ClassFilter, CourseFilter, AirtimeFilter)
+                   "welcome_message_sent", ClassFilter, CourseFilter, AirtimeFilter, LearnerLimit)
     search_fields = ("last_name", "first_name", "username")
     ordering = ("country", "area", "last_name", "first_name", "last_login")
     filter_horizontal = ()
