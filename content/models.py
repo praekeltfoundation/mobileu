@@ -7,6 +7,7 @@ from mobileu.utils import format_content, format_option
 from django.db.models import Count
 from datetime import datetime
 from organisation.models import CourseModuleRel
+from core.models import Class, Participant, ParticipantQuestionAnswer
 from django.core.mail import mail_managers
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -98,6 +99,20 @@ class TestingQuestion(models.Model):
         self.question_content = format_content(self.question_content)
         self.answer_content = format_content(self.answer_content)
         super(TestingQuestion, self).save(*args, **kwargs)
+
+    def get_unanswered_participants(self):
+        if not self.module.is_active:
+            return None
+        course_rels = CourseModuleRel.objects.filter(module__is_active=True,
+                                                     module_id=self.module_id)
+        classes = Class.objects.filter(is_active=True,
+                                       course_id__in=[course.course_id for course in course_rels])
+        participants = Participant.objects.filter(is_active=True,
+                                                  classs__in=classes)
+        answered = ParticipantQuestionAnswer.objects.filter(
+            question_id=self.id,
+            participant__in=participants)
+        return participants.exclude(answered)
 
     class Meta:
         verbose_name = "Test Question"
