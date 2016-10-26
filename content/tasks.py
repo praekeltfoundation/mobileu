@@ -71,7 +71,9 @@ def sms_new_questions_body(questions, msg=None):
     participants = Participant.objects.none()
 
     for question in questions:
-        participants |= question.get_unanswered_participants()
+        new_participants = question.get_unanswered_participants()
+        if new_participants is not None:
+            participants = participants | new_participants
 
     learners = Learner.objects.filter(participant__in=participants)
     if learners is None:
@@ -82,4 +84,4 @@ def sms_new_questions_body(questions, msg=None):
                                   default='Hi, there. We have new questions for you on Dig-it!')
 
     vumi = VumiSmsApi()
-    vumi.send_all(learners, msg)
+    vumi.send_all(learners, message=msg)
