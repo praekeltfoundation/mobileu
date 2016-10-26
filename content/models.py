@@ -114,7 +114,9 @@ class TestingQuestion(models.Model):
         answered = ParticipantQuestionAnswer.objects.filter(
             question_id=self.id,
             participant__in=participants)
-        return participants.exclude(answered)
+        if answered is None:
+            participants = participants.exclude(answered)
+        return participants
 
     class Meta:
         verbose_name = "Test Question"

@@ -74,12 +74,12 @@ def sms_new_questions_body(questions, msg=None):
         participants |= question.get_unanswered_participants()
 
     learners = Learner.objects.filter(participant__in=participants)
+    if learners is None:
+        return
 
     if msg is None:
-        try:
-            msg = Setting.get_setting('LEARNER_NEW_QUESTIONS_MSG')
-        except:
-            msg = 'Hi, there. We have new questions for you on Dig-it!'
+        msg = Setting.get_setting('LEARNER_NEW_QUESTIONS_MSG',
+                                  default='Hi, there. We have new questions for you on Dig-it!')
 
     vumi = VumiSmsApi()
     vumi.send_all(learners, msg)
