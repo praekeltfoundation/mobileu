@@ -5,12 +5,12 @@ from content.forms import process_mathml_content, render_mathml, convert_to_tags
 from organisation.models import Course, Module, CourseModuleRel, School, Organisation
 from auth.models import Learner
 from core.models import Participant, Class, ParticipantBadgeTemplateRel, ParticipantQuestionAnswer
-from content.tasks import end_event_processing_body
+from content.tasks import end_event_processing_body, sms_new_questions_body
 from mobileu.tasks import send_sumit_counts_body
 
 from django.test import TestCase
 from datetime import datetime, timedelta
-from mock import patch
+from mock import ANY, patch
 from django.conf import settings
 import os
 
@@ -617,3 +617,121 @@ class TestContent(TestCase):
         participant.classs = new_class
         participant.save()
         self.assertEqual(self.question.get_unanswered_participants().count(), num_learners - num_answered - 1)
+
+    @patch('content.tasks.VumiSmsApi', autospec=True)
+    def test_sms_new_questions_body(self, fake_vumi):
+        num_learners = 15
+        self.learner.delete()
+        self.participant.delete()
+        self.question.state = self.question.PUBLISHED
+        self.question.save()
+
+        # no one has answered the question yet, single question
+        for i in range(num_learners):
+            learner = Learner.objects.create(username='learn%d' % (i,),
+                                             first_name='Learn%d' % (i,),
+                                             mobile='012345%04d' % (i,),
+                                             school=self.school,
+                                             grade="Grade 12")
+            participant = Participant.objects.create(learner=learner,
+                                                     classs=self.classs,
+                                                     datejoined=datetime.now())
+        sms_new_questions_body(TestingQuestion.objects.filter(pk=self.question.id))
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners)
+
+        # no one has answered the question yet, multiple questions
+        fake_vumi.reset_mock()
+        self.question.delete()
+        num_questions = 5
+        for i in range(num_questions):
+            TestingQuestion.objects.create(name='Q%d' % (i,),
+                                           module=self.module,
+                                           state=TestingQuestion.PUBLISHED)
+        questions = TestingQuestion.objects.all()
+        sms_new_questions_body(questions)
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners)
+
+        # some questions answered
+        fake_vumi.reset_mock()
+        participant = Participant.objects.all().last()
+        for i in range(questions.count()):
+            question = questions[i]
+            option = TestingQuestionOption.objects.create(name='A%d' % (i,),
+                                                          question=question,
+                                                          correct=True)
+            ParticipantQuestionAnswer.objects.create(question=question,
+                                                     participant=participant,
+                                                     option_selected=option,
+                                                     correct=option.correct)
+        sms_new_questions_body(questions)
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners - 1)
+
+        # some questions in different module
+        fake_vumi.reset_mock()
+        ParticipantQuestionAnswer.objects.all().delete()
+        num_questions_moved = 2
+        new_course = self.create_course(name='Best course')
+        new_module = self.create_module('Best module', new_course)
+        for question in questions[:num_questions_moved]:
+            question.module = new_module
+            question.save()
+        sms_new_questions_body(questions)
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners)
+
+        # some learners in different class, with different modules
+        fake_vumi.reset_mock()
+        num_participants_moved = 5
+        new_class = self.create_class('Best class', new_course)
+        participants = Participant.objects.all()
+        for participant in participants[:num_participants_moved]:
+            participant.classs = new_class
+            participant.save()
+        sms_new_questions_body(questions)
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners)
+
+        # different classes, different modules, some answered
+        fake_vumi.reset_mock()
+        participant_skip_count = 2
+        num_participants_answered = 0
+        for participant in participants[::participant_skip_count]:
+            for question in questions:
+                option = TestingQuestionOption.objects.get(question=question)
+                ParticipantQuestionAnswer.objects.create(question=question,
+                                                         participant=participant,
+                                                         option_selected=option,
+                                                         correct=option.correct)
+            num_participants_answered += 1
+        sms_new_questions_body(questions)
+        fake_vumi().send_all.assert_called_once_with(ANY, message='Hi, there. We have new questions for you on Dig-it!')
+        args, kwargs = fake_vumi().send_all.call_args
+        self.assertEqual(len(args), 1)
+        self.assertEqual(len(args[0]), num_learners - num_participants_answered)
+
+        # different classes, different modules, all answered
+        fake_vumi.reset_mock()
+        ParticipantQuestionAnswer.objects.all().delete()
+        num_participants_answered = num_learners
+        for participant in participants:
+            for question in questions:
+                option = TestingQuestionOption.objects.get(question=question)
+                ParticipantQuestionAnswer.objects.create(question=question,
+                                                         participant=participant,
+                                                         option_selected=option,
+                                                         correct=option.correct)
+        sms_new_questions_body(questions)
+        self.assertFalse(fake_vumi.called)
