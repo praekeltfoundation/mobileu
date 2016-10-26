@@ -76,7 +76,7 @@ def sms_new_questions_body(questions, msg=None):
             participants = participants | new_participants
 
     learners = Learner.objects.filter(participant__in=participants)
-    if learners is None:
+    if learners is None or len(learners) == 0:
         return
 
     if msg is None:
