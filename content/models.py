@@ -100,7 +100,7 @@ class TestingQuestion(models.Model):
         super(TestingQuestion, self).save(*args, **kwargs)
 
     def get_unanswered_participants(self):
-        if not self.module.is_active:
+        if not self.module.is_active or self.state != self.PUBLISHED:
             return None
         Class = get_model("core", "Class")
         Participant = get_model("core", "Participant")
@@ -114,8 +114,8 @@ class TestingQuestion(models.Model):
         answered = ParticipantQuestionAnswer.objects.filter(
             question_id=self.id,
             participant__in=participants)
-        if answered is None:
-            participants = participants.exclude(answered)
+        if answered is not None:
+            participants = participants.exclude(participantquestionanswer__in=answered)
         return participants
 
     class Meta:
