@@ -4,7 +4,7 @@ from content.forms import process_mathml_content, render_mathml, convert_to_tags
     TestingQuestionCreateForm
 from organisation.models import Course, Module, CourseModuleRel, School, Organisation
 from auth.models import Learner
-from core.models import Participant, Class, ParticipantBadgeTemplateRel
+from core.models import Participant, Class, ParticipantBadgeTemplateRel, ParticipantQuestionAnswer
 from content.tasks import end_event_processing_body
 from mobileu.tasks import send_sumit_counts_body
 
@@ -574,3 +574,46 @@ class TestContent(TestCase):
         self.delete_test_question(q2)
         q4 = TestingQuestionCreateForm(form_data.copy()).save()
         self.assertLess(q3.order, q4.order, 'Q3.order: %d; Q4.order: %d' % (q3.order, q4.order))
+
+    def test_get_unanswered_participants(self):
+        num_learners = 15
+        self.learner.delete()
+        self.participant.delete()
+        self.question.state = self.question.PUBLISHED
+        self.question.save()
+        option = TestingQuestionOption.objects.create(question=self.question, correct=True)
+
+        # no one has answered the question yet
+        for i in range(num_learners):
+            learner = Learner.objects.create(username='learn%d' % (i,),
+                                             first_name='Learn%d' % (i,),
+                                             mobile='012345%04d' % (i,),
+                                             school=self.school,
+                                             grade="Grade 12")
+            participant = Participant.objects.create(learner=learner,
+                                                     classs=self.classs,
+                                                     datejoined=datetime.now())
+        self.assertEqual(self.question.get_unanswered_participants().count(), num_learners)
+
+        # some participants have answered
+        num_answered = 5
+        for p in Participant.objects.all()[:num_answered]:
+            ParticipantQuestionAnswer.objects.create(participant=p,
+                                                     question=self.question,
+                                                     option_selected=option,
+                                                     correct=option.correct)
+        self.assertEqual(self.question.get_unanswered_participants().count(), num_learners - num_answered)
+
+        # participant is no longer active
+        participant = Participant.objects.all().last()
+        participant.is_active = False
+        participant.save()
+        self.assertEqual(self.question.get_unanswered_participants().count(), num_learners - num_answered - 1)
+
+        # participant is in another class
+        new_course = self.create_course(name='Best Course')
+        new_class = self.create_class('Best class', new_course)
+        participant.is_active = True
+        participant.classs = new_class
+        participant.save()
+        self.assertEqual(self.question.get_unanswered_participants().count(), num_learners - num_answered - 1)
