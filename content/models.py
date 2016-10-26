@@ -4,10 +4,9 @@ from organisation.models import Module
 from django.core.urlresolvers import reverse
 from django.utils.html import remove_tags, format_html
 from mobileu.utils import format_content, format_option
-from django.db.models import Count
+from django.db.models import Count, get_model
 from datetime import datetime
 from organisation.models import CourseModuleRel
-from core.models import Class, Participant, ParticipantQuestionAnswer
 from django.core.mail import mail_managers
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -103,6 +102,9 @@ class TestingQuestion(models.Model):
     def get_unanswered_participants(self):
         if not self.module.is_active:
             return None
+        Class = get_model("core", "Class")
+        Participant = get_model("core", "Participant")
+        ParticipantQuestionAnswer = get_model("core", "ParticipantQuestionAnswer")
         course_rels = CourseModuleRel.objects.filter(module__is_active=True,
                                                      module_id=self.module_id)
         classes = Class.objects.filter(is_active=True,
