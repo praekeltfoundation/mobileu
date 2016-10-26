@@ -2,9 +2,11 @@ from datetime import datetime
 import operator
 
 from djcelery import celery
+from auth.models import Learner
 from content.forms import render_mathml
-from content.models import Event, EventParticipantRel, EventQuestionRel, EventQuestionAnswer
-from core.models import Participant
+from content.models import Event, EventParticipantRel, EventQuestionAnswer
+from core.models import Participant, Setting
+from communication.utils import VumiSmsApi
 from organisation.models import CourseModuleRel
 from django.db.models import Count
 
@@ -58,3 +60,26 @@ def end_event_processing_body():
 
         event.end_processed = True
         event.save()
+
+
+@celery.task
+def sms_new_questions(questions, msg=None):
+    sms_new_questions_body(questions, msg)
+
+
+def sms_new_questions_body(questions, msg=None):
+    participants = Participant.objects.none()
+
+    for question in questions:
+        participants |= question.get_unanswered_participants()
+
+    learners = Learner.objects.filter(participant__in=participants)
+
+    if msg is None:
+        try:
+            msg = Setting.get_setting('LEARNER_NEW_QUESTIONS_MSG')
+        except:
+            msg = 'Hi, there. We have new questions for you on Dig-it!'
+
+    vumi = VumiSmsApi()
+    vumi.send_all(learners, msg)
