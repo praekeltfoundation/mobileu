@@ -328,13 +328,12 @@ class Setting(models.Model):
     value = models.TextField("Value", max_length=100, blank=False)
 
     @staticmethod
-    def get_setting(key):
-        setting = Setting.objects.filter(key__exact=key).first()
-
-        if setting:
+    def get_setting(key, default=None):
+        try:
+            setting = Setting.objects.get(key=key)
             return setting.value
-        else:
-            return None
+        except:
+            return default
 
 
 class TaskLogger(models.Model):
