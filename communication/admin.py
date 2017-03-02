@@ -8,8 +8,7 @@ from .filters import *
 from .models import PostCommentLike
 from django.utils.http import urlquote
 from import_export.admin import ImportExportModelAdmin
-from communication.resources import SmsQueueResource
-from communication.resources import SmsResource
+from communication.resources import SmsQueueResource, SmsResource
 
 
 class PageAdmin(admin.ModelAdmin):
