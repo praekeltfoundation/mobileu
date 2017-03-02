@@ -34,7 +34,6 @@ class SmsResource(resources.ModelResource):
             'responded',
             'respond_date',
             'response',
-            'sent_date',
         )
         export_order = (
             'uuid',
@@ -44,5 +43,4 @@ class SmsResource(resources.ModelResource):
             'responded',
             'respond_date',
             'response',
-            'sent_date',
         )
