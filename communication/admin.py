@@ -9,6 +9,7 @@ from .models import PostCommentLike
 from django.utils.http import urlquote
 from import_export.admin import ImportExportModelAdmin
 from communication.resources import SmsQueueResource
+from communication.resources import SmsResource
 
 
 class PageAdmin(admin.ModelAdmin):
@@ -169,10 +170,11 @@ class MessageAdmin(SummernoteModelAdmin):
     get_response.allow_tags = True
 
 
-class SmsAdmin(SummernoteModelAdmin):
+class SmsAdmin(ImportExportModelAdmin):
     list_display = ("id", "msisdn", "date_sent", "message", "get_response")
     search_fields = ("msisdn", "date_sent", "message")
     list_filter = ("responded",)
+    resource_class = SmsResource
 
     def get_response(self, obj):
         if obj.responded:
