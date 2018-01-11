@@ -21,12 +21,13 @@ setup(
         'go_http==0.1.1',
         'koremutake==1.0.5',
         'mock==1.0.1',
-        'psycopg2==2.5.3',
+        'psycopg2==2.7.3.2',
         'pyDNS',
         'requests==2.3.0',
         'responses==0.5.1',
         'validate_email',
-        'xlwt'
+        'xlwt',
+        'django-daterange-filter'
     ],
     url='www.praekelt.co.za',
     license='',
