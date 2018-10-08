@@ -28,18 +28,16 @@ def get_autologin_link(unique_token):
 class SmsSender:
 
     def send(self, send_to, send_from, message):
-        url = "https://junebug.qa.dig-it.me/jb/channels/ab79e9c5-7d15-440f-8bd0-6a0e2d2445b1/messages/"
+        url = settings.JUNEBUG_BASE_URL + settings.JUNEBUG_CHANNEL_ID
 
         payload = "{\"to\": \"%s\", \"from\": \"%s\", \"content\": \"%s\"}" % (send_to, send_from, message)
         headers = {
-            'authorization': "Basic anVuZWJ1ZzpEYkFPVEJzbTR6WGJVMTB4",
+            'authorization': settings.JUNEBUG_AUTHORISATION_TYPE,
             'content-type': "application/json",
             'cache-control': "no-cache"
         }
 
         response = requests.request("POST", url, data=payload, headers=headers)
-
-        print(response.text)
 
 
 class JunebugApi:
