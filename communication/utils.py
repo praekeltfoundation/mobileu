@@ -33,10 +33,10 @@ class SmsSender:
             settings.JUNEBUG_BASE_URL,
             "/jb/channels/{}/messages/".format(settings.JUNEBUG_CHANNEL_ID))
 
-        payload = "{\"to\": \"%s\", \"from\": \"%s\", \"content\": \"%s\"}" % (send_to, send_from, message)
+        payload = {"to": send_to, "from": send_from, "content": message}
 
         response = requests.request(
-            "POST", url, data=payload, auth=(settings.JUNEBUG_USERNAME, settings.JUNEBUG_PASSWORD))
+            "POST", url, json=payload, auth=(settings.JUNEBUG_USERNAME, settings.JUNEBUG_PASSWORD))
 
 
 class JunebugApi:
