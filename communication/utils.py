@@ -29,7 +29,9 @@ def get_autologin_link(unique_token):
 class SmsSender:
 
     def send(self, send_to, send_from, message):
-        url = urlparse.urljoin(settings.JUNEBUG_BASE_URL + settings.JUNEBUG_CHANNEL_ID)
+        url = urlparse.urljoin(
+            settings.JUNEBUG_BASE_URL,
+            "/jb/channels/{}/messages/".format(settings.JUNEBUG_CHANNEL_ID))
 
         payload = "{\"to\": \"%s\", \"from\": \"%s\", \"content\": \"%s\"}" % (send_to, send_from, message)
 
