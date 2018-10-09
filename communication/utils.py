@@ -9,6 +9,7 @@ import koremutake
 import logging
 import requests
 import re
+import urlparse
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -28,16 +29,12 @@ def get_autologin_link(unique_token):
 class SmsSender:
 
     def send(self, send_to, send_from, message):
-        url = settings.JUNEBUG_BASE_URL + settings.JUNEBUG_CHANNEL_ID
+        url = urlparse.urljoin(settings.JUNEBUG_BASE_URL + settings.JUNEBUG_CHANNEL_ID)
 
         payload = "{\"to\": \"%s\", \"from\": \"%s\", \"content\": \"%s\"}" % (send_to, send_from, message)
-        headers = {
-            'authorization': settings.JUNEBUG_AUTHORISATION_TYPE,
-            'content-type': "application/json",
-            'cache-control': "no-cache"
-        }
 
-        response = requests.request("POST", url, data=payload, headers=headers)
+        response = requests.request(
+            "POST", url, data=payload, auth=(settings.JUNEBUG_USERNAME, settings.JUNEBUG_PASSWORD))
 
 
 class JunebugApi:
