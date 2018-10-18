@@ -1,15 +1,18 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
-from go_http import HttpApiSender, LoggingSender
+from go_http import LoggingSender
 from django.contrib.auth.hashers import make_password
 from random import randint
 from datetime import datetime, timedelta
 from .models import Sms, Ban, Profanity, ChatMessage, PostComment, Discussion
+from requests import RequestException
 import koremutake
 import logging
 import requests
 import re
 import urlparse
+import json
+import exceptions
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -33,10 +36,15 @@ class SmsSender:
             settings.JUNEBUG_BASE_URL,
             "/jb/channels/{}/messages/".format(settings.JUNEBUG_CHANNEL_ID))
 
-        payload = {"to": send_to, "from": send_from, "content": message}
+        data = {}
+        data['to'] = send_to
+        data['from'] = send_from
+        data['content'] = message
 
-        response = requests.request(
-            "POST", url, json=payload, auth=(settings.JUNEBUG_USERNAME, settings.JUNEBUG_PASSWORD))
+        payload = json.dumps(data)
+
+        return requests.request(
+            "POST", url, data=payload, auth=(settings.JUNEBUG_USERNAME, settings.JUNEBUG_PASSWORD))
 
 
 class JunebugApi:
@@ -81,24 +89,31 @@ class JunebugApi:
         # Send the url
         message = self.templatize(message, password, autologin)
         msisdn = self.prepare_msisdn(msisdn)
+        sms_sender = SmsSender()
+
         try:
-            response = self.sender.send_text(to_addr=msisdn, content=message)
-        except requests.exceptions.RequestException as e:
+            response = sms_sender.send(msisdn, settings.JUNEBUG_FROM, message)
+        except RequestException as e:
             sent = False
             logger.error(e)
-            return None, sent
+            if hasattr(settings, 'JUNEBUG_FAKE') and settings.JUNEBUG_FAKE:
+                sms = self.save_sms_log(False, message, datetime.now(), msisdn)
+                return sms, settings.JUNEBUG_FAKE
+            else:
+                return None, sent
 
-        if u'success' in response.keys() and response[u'success'] is False:
+        if response.status_code != 201:
             sms = self.save_sms_log(False, message, datetime.now(), msisdn)
             sent = False
         else:
-            if u"message_id" in response.keys():
-                msg_id = response[u"message_id"]
+            json_response = json.loads(response.content)[u'result'] 
+            if u'message_id' in json_response:
+                msg_id = json_response[u'message_id']
             else:
                 msg_id = u"Not in response"
 
-            if u"timestamp" in response.keys():
-                ts = response[u"timestamp"]
+            if u'timestamp' in json_response:
+                ts = response[u'timestamp']
             else:
                 ts = datetime.now()
 

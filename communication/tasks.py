@@ -11,11 +11,13 @@ from communication.utils import JunebugApi, SmsSender
 
 @app.task
 def update_metric(name, value, metric_type):
-    sender = HttpApiSender(
-        username=settings.JUNEBUG_USERNAME,
-        password=settings.JUNEBUG_PASSWORD,
-        api_url=settings.JUNEBUG_BASE_URL+settings.JUNEBUG_CHANNEL_ID+settings.JUNEBUG_ACCOUNT_NUMBER)
-    sender.fire_metric(name, value, agg=metric_type)
+    if hasattr(settings, 'VUMI_METRICS_ON') and settings.VUMI_METRICS_ON:
+        sender = HttpApiSender(
+            account_key=settings.VUMI_GO_ACCOUNT_KEY,
+            conversation_key=settings.VUMI_GO_CONVERSATION_KEY,
+            conversation_token=settings.VUMI_GO_ACCOUNT_TOKEN
+        )
+        sender.fire_metric(name, value, agg=metric_type)
 
 
 @app.task
