@@ -199,6 +199,7 @@ except ImportError as e:
 JUNEBUG_BASE_URL = os.environ.get("JUNEBUG_BASE_URL", "")
 JUNEBUG_CHANNEL_ID = os.environ.get("JUNEBUG_CHANNEL_ID", "")
 JUNEBUG_FAKE = os.environ.get("JUNEBUG_FAKE", "")
+JUNEBUG_FROM= os.environ.get("JUNEBUG_FROM", "")
 JUNEBUG_FAKE_TO = os.environ.get("JUNEBUG_FAKE_TO", "")
 JUNEBUG_USERNAME = os.environ.get("JUNEBUG_USERNAME", "")
 JUNEBUG_PASSWORD = os.environ.get("JUNEBUG_PASSWORD", "")
