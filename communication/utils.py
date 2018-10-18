@@ -96,7 +96,11 @@ class JunebugApi:
         except RequestException as e:
             sent = False
             logger.error(e)
-            return None, sent
+            if hasattr(settings, 'JUNEBUG_FAKE') and settings.JUNEBUG_FAKE:
+                sms = self.save_sms_log(False, message, datetime.now(), msisdn)
+                return sms, settings.JUNEBUG_FAKE
+            else:
+                return None, sent
 
         if response.status_code != 201:
             sms = self.save_sms_log(False, message, datetime.now(), msisdn)

@@ -375,7 +375,6 @@ class TestProfanity(TestCase):
 class TestSms(TestCase):
     def test_send_sms(self):
         settings.__setattr__("JUNEBUG_FAKE", True)
-        settings.__setattr__("JUNEBUG_FROM", "*11910")
         api = JunebugApi()
         sms, sent = api.send("+27715597770", "test", None, None)
 
