@@ -5,12 +5,14 @@ from django.contrib.auth.hashers import make_password
 from random import randint
 from datetime import datetime, timedelta
 from .models import Sms, Ban, Profanity, ChatMessage, PostComment, Discussion
+from requests import RequestException
 import koremutake
 import logging
 import requests
 import re
 import urlparse
 import json
+import exceptions
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -91,7 +93,7 @@ class JunebugApi:
 
         try:
             response = sms_sender.send(msisdn, settings.JUNEBUG_FROM, message)
-        except requests.exceptions.RequestException as e:
+        except RequestException as e:
             sent = False
             logger.error(e)
             return None, sent
