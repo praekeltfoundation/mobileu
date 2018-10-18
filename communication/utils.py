@@ -113,7 +113,7 @@ class JunebugApi:
                 msg_id = u"Not in response"
 
             if u'timestamp' in json_response:
-                ts = response[u'timestamp']
+                ts = json_response[u'timestamp']
             else:
                 ts = datetime.now()
 
